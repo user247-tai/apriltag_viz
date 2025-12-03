@@ -3,15 +3,22 @@ from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
 
 def generate_launch_description():
-    composable_node = ComposableNode(node_name='viz', package='apriltag_viz', node_plugin='AprilVizNode')
+    composable_node = ComposableNode(
+        package='apriltag_viz',
+        plugin='AprilVizNode',   # or "apriltag_viz::AprilVizNode" if it’s in a namespace
+        name='viz',
+        remappings=[
+            ('/apriltag/image', '/detect/image')
+        ],
+    )
+
     container = ComposableNodeContainer(
-            node_name='viz_container',
-            node_namespace='apriltag',
-            package='rclcpp_components',
-            node_executable='component_container',
-            composable_node_descriptions=[composable_node],
-            remappings=[("/apriltag/image", "/camera/image")],
-            output='screen'
+        name='viz_container',
+        namespace='apriltag',
+        package='rclcpp_components',
+        executable='component_container',
+        composable_node_descriptions=[composable_node],
+        output='screen',
     )
 
     return launch.LaunchDescription([container])

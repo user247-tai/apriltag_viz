@@ -1,7 +1,7 @@
 // ros
 #include <rclcpp/rclcpp.hpp>
 #include <image_transport/image_transport.hpp>
-#include <cv_bridge/cv_bridge.h>
+#include <cv_bridge/cv_bridge.hpp>
 #include <sensor_msgs/msg/image.hpp>
 #include <apriltag_msgs/msg/april_tag_detection.hpp>
 #include <apriltag_msgs/msg/april_tag_detection_array.hpp>
@@ -19,12 +19,12 @@ public:
 
         pub_tags = image_transport::create_publisher(this, "tag_detections_image");
 
-        sub_img = image_transport::create_subscription(this, "image",
+        sub_img = image_transport::create_subscription(this, "/camera/image_rect",
             std::bind(&AprilVizNode::onImage, this, std::placeholders::_1),
             image_transport);
 
         sub_tag = this->create_subscription<apriltag_msgs::msg::AprilTagDetectionArray>(
-            "detections", rclcpp::QoS(1),
+            "/camera/detections", rclcpp::QoS(1),
             std::bind(&AprilVizNode::onTags, this, std::placeholders::_1));
     }
 
