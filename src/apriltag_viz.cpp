@@ -19,12 +19,12 @@ public:
 
         pub_tags = image_transport::create_publisher(this, "tag_detections_image");
 
-        sub_img = image_transport::create_subscription(this, "/camera/camera/color/image_rect",
+        sub_img = image_transport::create_subscription(this, "/image_rect",
             std::bind(&AprilVizNode::onImage, this, std::placeholders::_1),
             image_transport);
 
         sub_tag = this->create_subscription<apriltag_msgs::msg::AprilTagDetectionArray>(
-            "/camera/camera/color/detections", rclcpp::QoS(1),
+            "/detections", rclcpp::QoS(1),
             std::bind(&AprilVizNode::onTags, this, std::placeholders::_1));
     }
 
